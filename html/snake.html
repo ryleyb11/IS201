@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pastel Snake Game</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f8b1d1, #b3e5fc);
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            background-color: #ffffffcc;
+            border: 5px solid #c5cae9;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        #restartButton {
+            display: none;
+            position: absolute;
+            top: 60%;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #ffffff;
+            background: #f8b1d1;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #restartButton:hover {
+            background: #ff80ab;
+        }
+        #nav {
+            position: absolute;
+            top: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        #nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 10px;
+            padding: 5px 10px;
+            background: #f8b1d1;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        #nav a:hover {
+            background: #ff80ab;
+        }
+        #musicButton {
+        position: absolute;
+        top: 85%;
+        /* right: 10px; */
+        padding: 10px 15px;
+        font-size: 14px;
+        background-color: #f8b1d1;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        #musicButton:hover {
+            background-color: #ff80ab;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav">
+        <a href="index.html">Resume (Home)</a>
+        <a href="1scratch.html">From-Scratch Page</a>
+        <a href="#">Snake Game</a>
+    </div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <button id="restartButton">Restart</button>
+    <button id="musicButton">Play Music</button>
+    <audio id="backgroundMusic" src="../assets/calm-background-music.mp3" loop></audio>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const restartButton = document.getElementById('restartButton');
+        const chimeSound = new Audio('../assets/chime-0006.wav'); // Load the sound effect
+
+        const box = 20;
+        let snake, direction, food, score, gameLoop;
+
+        function initializeGame() {
+            snake = [{ x: 8 * box, y: 8 * box }];
+            direction = null;
+            food = generateFood();
+            score = 0;
+            restartButton.style.display = 'none';
+            gameLoop = setInterval(gameLoopFunction, 150);
+        }
+
+        function drawBackground() {
+            ctx.fillStyle = '#ffffffcc';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSnake() {
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = index === 0 ? '#f8b1d1' : '#b3e5fc';
+                ctx.fillRect(segment.x, segment.y, box, box);
+                ctx.strokeStyle = '#c5cae9';
+                ctx.strokeRect(segment.x, segment.y, box, box);
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = '#ffcc80';
+            ctx.beginPath();
+            ctx.arc(food.x + box / 2, food.y + box / 2, box / 2.5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function generateFood() {
+            return {
+                x: Math.floor(Math.random() * 18 + 1) * box, // Keeps food at least one box away from edges
+                y: Math.floor(Math.random() * 18 + 1) * box
+            };
+        }
+
+        function moveSnake() {
+            const head = { x: snake[0].x, y: snake[0].y };
+            if (direction === 'LEFT') head.x -= box;
+            if (direction === 'UP') head.y -= box;
+            if (direction === 'RIGHT') head.x += box;
+            if (direction === 'DOWN') head.y += box;
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                const chimeClone = chimeSound.cloneNode(); // Create a new instance of the sound
+                chimeClone.play(); // Play the cloned sound
+                food = generateFood();
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+
+            if (
+                head.x < 0 || head.y < 0 ||
+                head.x >= canvas.width || head.y >= canvas.height ||
+                snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
+            ) {
+                clearInterval(gameLoop);
+                ctx.fillStyle = '#616161';
+                ctx.font = '24px Arial';
+                ctx.fillText('Game Over', canvas.width / 2 - 60, canvas.height / 2);
+                restartButton.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+            if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+            if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+            if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+        });
+
+        restartButton.addEventListener('click', initializeGame);
+
+        function gameLoopFunction() {
+            drawBackground();
+            drawFood();
+            moveSnake();
+            drawSnake();
+            checkCollision();
+        }
+
+        initializeGame();
+
+            // Music Script
+            const musicButton = document.getElementById('musicButton');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            let isPlaying = false;
+
+            musicButton.addEventListener('click', () => {
+                if (isPlaying) {
+                    backgroundMusic.pause();
+                    musicButton.textContent = 'Play Music';
+                } else {
+                    backgroundMusic.play();
+                    musicButton.textContent = 'Mute Music';
+                }
+                isPlaying = !isPlaying;
+            });
+
+            // Limit music playback to 1:17:00 and repeat
+            backgroundMusic.addEventListener('timeupdate', () => {
+                if (backgroundMusic.currentTime >= 77) { // 77 seconds = 1:17
+                    backgroundMusic.currentTime = 0;
+                }
+            });
+
+    </script>
+</body>
+</html>

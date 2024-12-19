@@ -1,0 +1,71 @@
+body{
+    background-color: #f1f6f6;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.common{
+    /* background-color: #CCCCCC; */
+    /* border: 2px solid white; */
+    position: absolute;
+}
+
+.header{
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    height: 100px;
+    z-index: 3;
+    border-bottom: solid 5px #9dbed2;
+    background-image: url('../images-scratch/Crows_flying.jpg');
+        background-size: cover;
+        background-repeat: no-repeat; /* Stops the tile disaster */
+        background-position: left;   
+    padding-right: 5px;
+}
+
+.leftmenu{
+    top: 114px;
+    left: 5px;
+    width: 100px;
+    bottom: 39px;
+    z-index: 1;
+    border-right: dotted 5px #9dbed2;
+    padding-left: 5px;
+}
+
+.mainbody{
+    top: 114px;
+    left: 114px;
+    right: 114px;
+    bottom: 39px;
+    padding-right: 5px;
+    padding-left: 15px;
+    border: none
+}
+
+.rightmenu{
+    top: 114px;
+    right: 5px;
+    width: 100px;
+    bottom: 39px;
+    border-left: solid 1px #555555;
+    padding-left: 5px;
+}
+
+.footer{
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    height: 25px;
+    font-size: 8px;
+    color: #999999;
+    text-align: center;
+    padding-top: 15px;
+    z-index: 2;
+    position: fixed;
+    border: none
+}
+
+.subheader{
+    float: right;
+}

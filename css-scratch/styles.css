@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: #555555;
+    background-color: rgb(244, 238, 210);
+}
+
+h1 {
+    color:rgb(47, 80, 108);
+    font-style: italic;
+}
+
+h3 {
+    color: #303030;
+}
+a{
+    color: #555555;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:visited {
+    color: #555555;
+}
+p{
+    text-indent: 20px;
+    color:rgb(47, 80, 108);
+    /* font-weight: bold; */
+}
+li{
+    font-weight: normal;
+    text-decoration: none;
+    color: #555555;
+}
+
+.listheading{font-weight: bold; font-style: normal; color:rgb(47, 80, 108);}
+.italics {font-style: italic;}
+.indented {text-indent: 20px;}
+  
